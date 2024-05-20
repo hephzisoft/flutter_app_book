@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "47414448574",
+    "firebase_url": "https://com-hephzisoft-appbook-default-rtdb.firebaseio.com",
+    "project_id": "com-hephzisoft-appbook",
+    "storage_bucket": "com-hephzisoft-appbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47414448574:android:41cc730c79322bbec529ef",
+        "android_client_info": {
+          "package_name": "com.hephzisoft.app_book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHLSCrRVe_6uulzkWUK7ZV2YrND3NKoJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
