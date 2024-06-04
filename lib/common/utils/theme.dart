@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './colors.dart';
-import 'typography.dart';
 
 class AppTheme {
   static var lightTheme = ThemeData(
@@ -10,7 +9,7 @@ class AppTheme {
       brightness: Brightness.light,
     ),
     fontFamily: 'Inter',
-    textTheme: AppTextTheme.textTheme,
+    
   );
   static var darkTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(
@@ -18,6 +17,6 @@ class AppTheme {
       brightness: Brightness.dark,
     ),
     fontFamily: 'Inter',
-    textTheme: AppTextTheme.textTheme,
+    
   );
 }
