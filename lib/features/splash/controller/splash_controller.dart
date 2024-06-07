@@ -5,4 +5,8 @@ part 'splash_controller.g.dart';
 class SplashController extends _$SplashController {
   @override
   int build() => 0;
+
+  void indexChange(int index) {
+    state = index;
+  }
 }

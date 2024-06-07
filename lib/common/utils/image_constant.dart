@@ -9,8 +9,9 @@ class ImageConstant {
   static const stealLikeBook = 'assets/images/steal-like.png';
   static const theAlchemistBook = 'assets/images/the-alchemist.png';
 
-  // Svg
+  // SVG
   static const girlReading = 'assets/svg/girls-reading.svg';
   static const peopleReading = 'assets/svg/people-reading.svg';
   static const onboardingImage3 = 'assets/svg/onboarding-3.svg';
+
 }

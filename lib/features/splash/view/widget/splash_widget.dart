@@ -15,12 +15,13 @@ class PageViewWidget extends ConsumerWidget {
     required this.image,
     required this.title,
     required this.subTitle,
+    this.controller,
   });
 
   final String image;
   final String title;
   final String subTitle;
-
+  final PageController? controller;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int index = ref.watch(splashControllerProvider);
@@ -30,7 +31,12 @@ class PageViewWidget extends ConsumerWidget {
           margin: EdgeInsets.only(top: 40.h, right: 10.w),
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              ref.watch(splashControllerProvider.notifier).indexChange(2);
+              controller!.animateToPage(index,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.decelerate);
+            },
             child: Text(
               'Skip',
               style: TextStyle(
@@ -91,7 +97,7 @@ class DotsIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DotsIndicator(
       dotsCount: dotsCount,
-      position: 1,
+      position: position,
       decorator: const DotsDecorator(
         activeSize: Size(20, 5),
         size: Size.square(8),
@@ -183,8 +189,7 @@ class ThirdPageViewWidget extends StatelessWidget {
                     text: 'Get Started Now',
                     verticalPadding: 14,
                     onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(RouteConstant.login);
+                      Navigator.of(context).pushNamed(RouteConstant.login);
                     },
                   ),
                 )
