@@ -110,7 +110,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          RouteConstant.tab, (route) => false);
+                          RouteConstant.login, (route) => false);
                       },
                       child: const Text('Login'),
                     ),

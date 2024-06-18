@@ -1,13 +1,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../common/routes/route_constant.dart';
+import '../../../common/utils/constants.dart';
+import '../../../common/widgets/popup_message.dart';
+import '../../../global.dart';
 import '../../../main.dart';
+import '../provider/login_notifier.dart';
 
 class LoginController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  void handleLoginWithEmailAndPassword() {}
+
+  void handleLoginWithEmailAndPassword(WidgetRef ref) async {
+    var state = ref.read(loginNotifierProvider);
+
+    try {
+      var credential = await _auth.signInWithEmailAndPassword(
+          email: state.email, password: state.password);
+
+      if (credential.user != null) {
+        Global.storageService
+            .setString(AppConstant.userToken, credential.user!.uid);
+      }
+    } on FirebaseAuthException catch (e) {
+      var message = 'An error occurred';
+    }
+  }
 
   void handleGoogleSignIn() async {
     try {
@@ -26,15 +47,21 @@ class LoginController {
       );
 
       // Once signed in, return the UserCredential
-      await _auth.signInWithCredential(credential);
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        Global.storageService
+            .setString(AppConstant.userToken, userCredential.user!.uid);
+
+        toastInfo('Welcome ${userCredential.user!.displayName}');
+      }
 
       // Update UI
-
-      navKey.currentState
-          !.pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
-      print("Successfully signed in");
-    } catch (e) {
-      print("Failed to sign in: $e");
+// TODO update this section
+      navKey.currentState!.pushNamed(RouteConstant.tab);
+    } on PlatformException catch (e) {
+      var message = e.code;
+      toastInfo(message);
     }
   }
 }

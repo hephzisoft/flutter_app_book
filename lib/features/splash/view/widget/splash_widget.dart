@@ -32,10 +32,10 @@ class PageViewWidget extends ConsumerWidget {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              ref.watch(splashControllerProvider.notifier).indexChange(2);
-              controller!.animateToPage(index,
-                  duration: const Duration(milliseconds: 300),
+              controller!.animateToPage(2,
+                  duration: const Duration(milliseconds: 100),
                   curve: Curves.decelerate);
+              ref.watch(splashControllerProvider.notifier).indexChange(2);
             },
             child: Text(
               'Skip',

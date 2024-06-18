@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     projectId: 'com-hephzisoft-appbook',
     databaseURL: 'https://com-hephzisoft-appbook-default-rtdb.firebaseio.com',
     storageBucket: 'com-hephzisoft-appbook.appspot.com',
+    androidClientId: '47414448574-7c59ijdi5224jc121d3r7ref4p9cd3v8.apps.googleusercontent.com',
+    iosClientId: '47414448574-ldeokt25kuimk6geqq5rvvpp2ka1l6gj.apps.googleusercontent.com',
     iosBundleId: 'com.hephzisoft.appBook',
   );
 
@@ -77,6 +79,8 @@ class DefaultFirebaseOptions {
     projectId: 'com-hephzisoft-appbook',
     databaseURL: 'https://com-hephzisoft-appbook-default-rtdb.firebaseio.com',
     storageBucket: 'com-hephzisoft-appbook.appspot.com',
+    androidClientId: '47414448574-7c59ijdi5224jc121d3r7ref4p9cd3v8.apps.googleusercontent.com',
+    iosClientId: '47414448574-ldeokt25kuimk6geqq5rvvpp2ka1l6gj.apps.googleusercontent.com',
     iosBundleId: 'com.hephzisoft.appBook',
   );
 
@@ -90,4 +94,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'com-hephzisoft-appbook.appspot.com',
     measurementId: 'G-0Q7CXYYF8F',
   );
+
 }

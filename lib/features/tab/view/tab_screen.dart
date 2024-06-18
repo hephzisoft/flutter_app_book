@@ -30,11 +30,11 @@ class TabScreen extends ConsumerWidget {
           ),
           NavigationDestination(
             label: '',
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.search),
           ),
           NavigationDestination(
             label: '',
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.book),
           ),
         ],
       ),

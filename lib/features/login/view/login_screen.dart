@@ -7,6 +7,7 @@ import '../../../common/utils/colors.dart';
 import '../../../common/widgets/button_widget.dart';
 import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';
+import '../controller/login_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +18,14 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   var previewPassword = false;
-   
+
+  late final LoginController _controller;
+  @override
+  void initState() {
+    _controller = LoginController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +156,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   width: double.infinity,
                   child: ButtonWidgetWithIcon(
                     verticalPadding: 15,
-                    onPressed: () {},
+                    onPressed: () {
+                      _controller.handleGoogleSignIn();
+                    },
                     icon: Image.asset(
                       ImageConstant.google,
                     ),

@@ -6,9 +6,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        
-      ],),
+      appBar: AppBar(
+        actions: const [],
+      ),
+      body: const SafeArea(
+        child: Text('This is the home page'),
+      ),
     );
   }
 }
