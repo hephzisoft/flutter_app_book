@@ -1,9 +1,11 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../common/routes/route_constant.dart';
+import '../../../common/services/auth_error_handling.dart';
 import '../../../common/utils/constants.dart';
 import '../../../common/widgets/popup_message.dart';
 import '../../../global.dart';
@@ -24,9 +26,13 @@ class LoginController {
       if (credential.user != null) {
         Global.storageService
             .setString(AppConstant.userToken, credential.user!.uid);
+
+
       }
     } on FirebaseAuthException catch (e) {
       var message = 'An error occurred';
+    } finally {
+
     }
   }
 
@@ -34,11 +40,11 @@ class LoginController {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
+      await _googleSignIn.signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
+      await googleSignInAccount!.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -56,12 +62,13 @@ class LoginController {
         toastInfo('Welcome ${userCredential.user!.displayName}');
       }
 
-      // Update UI
-// TODO update this section
       navKey.currentState!.pushNamed(RouteConstant.tab);
     } on PlatformException catch (e) {
-      var message = e.code;
-      toastInfo(message);
+      checkError(e.code);
+    } finally{
+
     }
   }
+
+
 }

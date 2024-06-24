@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../common/routes/route_constant.dart';
+import '../../../../common/utils/constants.dart';
 import '../../../../common/utils/image_constant.dart';
+import '../../../../global.dart';
 import '../../controller/splash_controller.dart';
 
 class PageViewWidget extends ConsumerWidget {
@@ -189,6 +191,8 @@ class ThirdPageViewWidget extends StatelessWidget {
                     text: 'Get Started Now',
                     verticalPadding: 14,
                     onPressed: () {
+                      Global.storageService
+                          .setBool(AppConstant.deviceFirstTime, true);
                       Navigator.of(context).pushNamed(RouteConstant.login);
                     },
                   ),
