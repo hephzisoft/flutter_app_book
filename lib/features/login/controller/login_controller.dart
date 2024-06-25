@@ -1,9 +1,9 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../common/global_loader/global_loader.dart';
 import '../../../common/routes/route_constant.dart';
 import '../../../common/services/auth_error_handling.dart';
 import '../../../common/utils/constants.dart';
@@ -18,7 +18,7 @@ class LoginController {
 
   void handleLoginWithEmailAndPassword(WidgetRef ref) async {
     var state = ref.read(loginNotifierProvider);
-
+    ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
     try {
       var credential = await _auth.signInWithEmailAndPassword(
           email: state.email, password: state.password);
@@ -26,13 +26,11 @@ class LoginController {
       if (credential.user != null) {
         Global.storageService
             .setString(AppConstant.userToken, credential.user!.uid);
-
-
       }
     } on FirebaseAuthException catch (e) {
-      var message = 'An error occurred';
+      toastInfo(checkError(e.code));
     } finally {
-
+      ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
     }
   }
 
@@ -40,11 +38,11 @@ class LoginController {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleSignInAccount =
-      await _googleSignIn.signIn();
+          await _googleSignIn.signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount!.authentication;
+          await googleSignInAccount!.authentication;
 
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
@@ -64,11 +62,18 @@ class LoginController {
 
       navKey.currentState!.pushNamed(RouteConstant.tab);
     } on PlatformException catch (e) {
-      checkError(e.code);
-    } finally{
-
+      toastInfo(checkError(e.code));
     }
   }
 
+  void forgetPassword() async {}
 
+  void logout() async {
+    try {
+      await _auth.signOut();
+      Global.storageService.setString(AppConstant.userToken, '');
+    } on FirebaseAuthException catch (e) {
+      toastInfo(checkError(e.code));
+    }
+  }
 }

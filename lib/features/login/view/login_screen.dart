@@ -1,13 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/routes/route_constant.dart';
+import '../../../common/services/auth_validator.dart';
 import '../../../common/utils/colors.dart';
 import '../../../common/widgets/button_widget.dart';
 import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';
 import '../controller/login_controller.dart';
+import '../provider/login_notifier.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -18,12 +21,40 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   var previewPassword = false;
-
+  late final TextEditingController? emailController;
+  late final TextEditingController? passwordController;
+  var _formKey = GlobalKey<FormState>();
   late final LoginController _controller;
+
   @override
   void initState() {
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
     _controller = LoginController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController!.dispose();
+    passwordController!.dispose();
+    super.dispose();
+  }
+
+  void login() {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    // saving both field to the login state
+    ref.read(loginNotifierProvider.notifier).updateEmail(emailController!.text);
+    ref
+        .read(loginNotifierProvider.notifier)
+        .updatePassword(emailController!.text);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
   }
 
   @override
@@ -61,43 +92,60 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(
                   height: 20.h,
                 ),
-                const TextFieldWidget(
-                    label: "Email Address", hintText: "Email Address"),
-                SizedBox(
-                  height: 20.h,
-                ),
-                TextFieldWidget(
-                  label: "Password",
-                  hintText: 'Password',
-                  isPasswordField: true,
-                  suffixIcon: SizedBox(
-                    width: 40.w,
-                    child: IconButton(
-                      icon: Icon(
-                        previewPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFieldWidget(
+                        label: "Email Address",
+                        hintText: "Email Address",
+                        controller: emailController,
+                        validator: emailValidator,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          previewPassword = !previewPassword;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: previewPassword,
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                    ),
-                    onPressed: () {},
-                    child: const Text('Forget Password?'),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+
+                      // Password field
+                      TextFieldWidget(
+                        label: "Password",
+                        hintText: 'Password',
+                        validator: passwordValidator,
+                        controller: passwordController,
+                        isPasswordField: true,
+                        suffixIcon: SizedBox(
+                          width: 40.w,
+                          child: IconButton(
+                            icon: Icon(
+                              previewPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                previewPassword = !previewPassword;
+                              });
+                            },
+                          ),
+                        ),
+                        obscureText: previewPassword,
+                      ),
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: primaryColor,
+                          ),
+                          onPressed: () {
+                            _controller.forgetPassword();
+                          },
+                          child: const Text('Forget Password?'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -107,8 +155,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   width: double.infinity,
                   child: ButtonWidget(
                     onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          RouteConstant.tab, (route) => false);
+                      login();
                     },
                     text: "Log in",
                     verticalPadding: 15,
