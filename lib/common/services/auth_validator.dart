@@ -1,32 +1,23 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
-String passwordValidator(String? value) {
+
+String? passwordValidator(String? value) {
   if (value != null) {
-    if (value.length >= 8) {
-      return 'Password cannot be less than 8';
+    if (value.length < 8) {
+      return 'Password must not be less than 8';
     }
+  } else {
+    return 'Password cannot be empty';
   }
-  return 'Password cannot be empty';
+  return null;
 }
 
-String emailValidator(String? value) {
+String? emailValidator(String? value) {
   if (value != null) {
     if (!value.contains('@')) {
       return 'Incorrect email format';
     }
+  } else {
+    return 'Email cannot be empty';
   }
-  return 'Email cannot be empty';
-}
-
-void verifyForm({GlobalKey<FormState>? formKey}) {
-  if (formKey != null) {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-
-    formKey.currentState!.save();
-    print(isValid);
-  }
+  return null;
 }

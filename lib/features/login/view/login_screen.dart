@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +23,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   var previewPassword = false;
   late final TextEditingController? emailController;
   late final TextEditingController? passwordController;
-  var _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   late final LoginController _controller;
 
   @override
@@ -49,12 +49,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     _formKey.currentState!.save();
     // saving both field to the login state
-    ref.read(loginNotifierProvider.notifier).updateEmail(emailController!.text);
+    ref.
+    read(loginNotifierProvider.notifier).
+    updateEmail(emailController!.text);
     ref
         .read(loginNotifierProvider.notifier)
-        .updatePassword(emailController!.text);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
+        .updatePassword(passwordController!.text);
+    _controller.handleLoginWithEmailAndPassword(ref);
   }
 
   @override

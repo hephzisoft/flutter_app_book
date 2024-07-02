@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/routes/route_constant.dart';
+import '../../../common/services/auth_validator.dart';
 import '../../../common/utils/colors.dart';
 import '../../../common/widgets/button_widget.dart';
 import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';
+import '../controller/register_controller.dart';
+import '../provider/register_notifier.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -17,6 +20,45 @@ class RegisterScreen extends ConsumerStatefulWidget {
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   var previewPassword = false;
+
+  late final TextEditingController? emailController;
+  late final TextEditingController? passwordController;
+  final _formKey = GlobalKey<FormState>();
+  late final RegisterController _controller;
+
+  @override
+  void initState() {
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    _controller = RegisterController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController!.dispose();
+    passwordController!.dispose();
+    super.dispose();
+  }
+
+  void register() {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    // saving both field to the login state
+    ref
+        .read(registerNotifierProvider.notifier)
+        .updateEmail(emailController!.text);
+    ref
+        .read(registerNotifierProvider.notifier)
+        .updatePassword(passwordController!.text);
+
+    _controller.handleRegisterWithEmailAndPassword(ref);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,42 +94,44 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 SizedBox(
                   height: 20.h,
                 ),
-                const TextFieldWidget(
-                  label: "Email Address",
-                  hintText: "Email Address",
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                TextFieldWidget(
-                  label: "Password",
-                  hintText: 'Password',
-                  isPasswordField: true,
-                  validator: (value) {
-                    if (value != null) {
-                      if (value.length < 6) {
-                        return "Password must be at least 6 characters";
-                      }
-                      return null;
-                    }
-                    return null;
-                  },
-                  suffixIcon: SizedBox(
-                    width: 40.w,
-                    child: IconButton(
-                      icon: Icon(
-                        previewPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFieldWidget(
+                        label: "Email Address",
+                        hintText: "Email Address",
+                        validator: emailValidator,
+                        controller: emailController,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          previewPassword = !previewPassword;
-                        });
-                      },
-                    ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      TextFieldWidget(
+                        label: "Password",
+                        hintText: 'Password',
+                        isPasswordField: true,
+                        controller: passwordController,
+                        validator: passwordValidator,
+                        suffixIcon: SizedBox(
+                          width: 40.w,
+                          child: IconButton(
+                            icon: Icon(
+                              previewPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                previewPassword = !previewPassword;
+                              });
+                            },
+                          ),
+                        ),
+                        obscureText: previewPassword,
+                      ),
+                    ],
                   ),
-                  obscureText: previewPassword,
                 ),
                 SizedBox(
                   height: 24.h,
@@ -95,7 +139,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ButtonWidget(
-                    onPressed: () {},
+                    onPressed: () {
+                      register();
+                    },
                     text: "Create new account",
                     verticalPadding: 15,
                     fontWeight: FontWeight.w600,
@@ -110,7 +156,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          RouteConstant.login, (route) => false);
+                            RouteConstant.login, (route) => false);
                       },
                       child: const Text('Login'),
                     ),
@@ -143,8 +189,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   child: ButtonWidgetWithIcon(
                     verticalPadding: 15,
                     onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(RouteConstant.tab);
+                      _controller.handleGoogleSignIn();
                     },
                     icon: Image.asset(
                       ImageConstant.google,

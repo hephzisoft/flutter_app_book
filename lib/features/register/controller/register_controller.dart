@@ -10,26 +10,25 @@ import '../../../common/utils/constants.dart';
 import '../../../common/widgets/popup_message.dart';
 import '../../../global.dart';
 import '../../../main.dart';
-import '../provider/login_notifier.dart';
+import '../provider/register_notifier.dart';
 
-class LoginController {
+class RegisterController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  void handleLoginWithEmailAndPassword(WidgetRef ref) async {
-    var state = ref.read(loginNotifierProvider);
-    
+  void handleRegisterWithEmailAndPassword(WidgetRef ref) async {
+    var state = ref.read(registerNotifierProvider);
     ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
+
     try {
-      var credential = await _auth.signInWithEmailAndPassword(
+      var credential = await _auth.createUserWithEmailAndPassword(
           email: state.email, password: state.password);
 
-      if (credential.user != null) {
-        Global.storageService
-            .setString(AppConstant.userToken, credential.user!.uid);
-      }
+      if (credential.user == null) return ;
+      await _auth.currentUser!.sendEmailVerification();
+    toastInfo('A verification email has been sent');
+      
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       toastInfo(checkError(e.code));
     } finally {
       ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
@@ -64,17 +63,6 @@ class LoginController {
 
       navKey.currentState!.pushNamed(RouteConstant.tab);
     } on PlatformException catch (e) {
-      toastInfo(checkError(e.code));
-    }
-  }
-
-  void forgetPassword() async {}
-
-  void logout() async {
-    try {
-      await _auth.signOut();
-      Global.storageService.setString(AppConstant.userToken, '');
-    } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
     }
   }

@@ -1,4 +1,3 @@
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'register_state.dart';
@@ -12,10 +11,12 @@ class RegisterNotifier extends _$RegisterNotifier {
     return RegisterState();
   }
 
-  void updateEmail(String email){
+  void updateEmail(String email) {
+
     state = state.copyWith(email: email);
   }
-  void updatePassword(String password){
+
+  void updatePassword(String password) {
     state = state.copyWith(password: password);
   }
 }

@@ -47,7 +47,9 @@ class TextFieldWidget extends StatelessWidget {
             color: whiteSoft,
           ),
           child: TextFormField(
-            validator: validator ,
+          controller: controller,
+
+          validator: validator ,
             obscureText: obscureText,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
