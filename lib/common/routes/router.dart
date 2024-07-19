@@ -2,6 +2,7 @@ import 'package:app_book/common/routes/route_constant.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/features_export.dart';
+import '../../features/login/view/widgets/forget_password_screen.dart';
 import '../../global.dart';
 
 class AppRouter {
@@ -26,6 +27,10 @@ class AppRouter {
       RouteList(
         routeName: RouteConstant.signup,
         widget: const RegisterScreen(),
+      ),
+      RouteList(
+        routeName: RouteConstant.forgetPassword,
+        widget: const ForgetPasswordScreen(),
       ),
     ];
   }

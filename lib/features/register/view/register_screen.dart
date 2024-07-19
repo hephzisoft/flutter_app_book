@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../common/global_loader/global_loader.dart';
 import '../../../common/routes/route_constant.dart';
 import '../../../common/services/auth_validator.dart';
 import '../../../common/utils/colors.dart';
@@ -41,13 +43,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
-  void register() {
+  void verifyForm() {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
 
     _formKey.currentState!.save();
+  }
+
+  void register() {
+    verifyForm();
     // saving both field to the login state
     ref
         .read(registerNotifierProvider.notifier)
@@ -61,6 +67,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var loading = ref.watch(globalLoaderProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -101,6 +108,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       TextFieldWidget(
                         label: "Email Address",
                         hintText: "Email Address",
+                        inputType: TextInputType.emailAddress,
                         validator: emailValidator,
                         controller: emailController,
                       ),
@@ -138,14 +146,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: ButtonWidget(
-                    onPressed: () {
-                      register();
-                    },
-                    text: "Create new account",
-                    verticalPadding: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  child: loading
+                      ? const CupertinoActivityIndicator(
+                          color: primaryColor,
+                        )
+                      : ButtonWidget(
+                          onPressed: () {
+                            register();
+                          },
+                          text: "Create new account",
+                          verticalPadding: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -186,20 +198,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     vertical: 20.h,
                   ),
                   width: double.infinity,
-                  child: ButtonWidgetWithIcon(
-                    verticalPadding: 15,
-                    onPressed: () {
-                      _controller.handleGoogleSignIn();
-                    },
-                    icon: Image.asset(
-                      ImageConstant.google,
-                    ),
-                    side: const BorderSide(),
-                    fontWeight: FontWeight.w600,
-                    backgroundColor: Colors.white,
-                    text: "Sign up with Google",
-                    textColor: primaryColor,
-                  ),
+                  child: loading
+                      ? const CupertinoActivityIndicator(
+                          color: primaryColor,
+                        )
+                      : ButtonWidgetWithIcon(
+                          verticalPadding: 15,
+                          onPressed: () {
+                            _controller.handleGoogleSignIn(ref);
+                          },
+                          icon: Image.asset(
+                            ImageConstant.google,
+                          ),
+                          side: const BorderSide(),
+                          fontWeight: FontWeight.w600,
+                          backgroundColor: Colors.white,
+                          text: "Sign up with Google",
+                          textColor: primaryColor,
+                        ),
                 )
               ],
             ),

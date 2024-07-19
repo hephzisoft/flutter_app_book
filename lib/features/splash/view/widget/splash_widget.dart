@@ -1,3 +1,4 @@
+import 'package:app_book/common/utils/colors.dart';
 import 'package:app_book/common/widgets/button_widget.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class PageViewWidget extends ConsumerWidget {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(top: 40.h, right: 10.w),
+          margin: EdgeInsets.only(top: 50.h, right: 10.w),
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
@@ -75,7 +76,7 @@ class PageViewWidget extends ConsumerWidget {
         ),
         Container(
           alignment: Alignment.center,
-          height: 100.h,
+          // height: 100.h,
           child: DotsIndicatorWidget(
             dotsCount: 3,
             position: index,
@@ -100,7 +101,8 @@ class DotsIndicatorWidget extends StatelessWidget {
     return DotsIndicator(
       dotsCount: dotsCount,
       position: position,
-      decorator: const DotsDecorator(
+      decorator: DotsDecorator(
+        activeColor: Theme.of(context).colorScheme.primary,
         activeSize: Size(20, 5),
         size: Size.square(8),
         activeShape: RoundedRectangleBorder(

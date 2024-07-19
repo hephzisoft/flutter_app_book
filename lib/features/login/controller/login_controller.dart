@@ -18,30 +18,39 @@ class LoginController {
 
   void handleLoginWithEmailAndPassword(WidgetRef ref) async {
     var state = ref.read(loginNotifierProvider);
-    
+
     ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
     try {
       var credential = await _auth.signInWithEmailAndPassword(
           email: state.email, password: state.password);
 
       if (credential.user != null) {
+        if (!credential.user!.emailVerified) {
+          await _auth.currentUser!.sendEmailVerification();
+          toastInfo('Email verification has been sent');
+          return;
+        }
         Global.storageService
             .setString(AppConstant.userToken, credential.user!.uid);
+        navKey.currentState!
+            .pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
       }
     } on FirebaseAuthException catch (e) {
-      print(e.code);
+      // print(e.code);
       toastInfo(checkError(e.code));
     } finally {
       ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
     }
   }
 
-  void handleGoogleSignIn() async {
+  void handleGoogleSignIn(WidgetRef ref) async {
+    ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
 
+      if (googleSignInAccount == null) toastInfo('Could not sign in');
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
@@ -62,18 +71,37 @@ class LoginController {
         toastInfo('Welcome ${userCredential.user!.displayName}');
       }
 
-      navKey.currentState!.pushNamed(RouteConstant.tab);
+      navKey.currentState!
+          .pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
     } on PlatformException catch (e) {
+      toastInfo(e.code);
+    } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
+    } finally {
+      ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
     }
   }
 
-  void forgetPassword() async {}
+  void forgetPassword(WidgetRef ref) async {
+    ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
+    try {
+      var state = ref.read(loginNotifierProvider);
+
+      await _auth.sendPasswordResetEmail(email: state.email);
+      toastInfo('Password reset sent');
+      navKey.currentState!.pushReplacementNamed(RouteConstant.login);
+    } on FirebaseAuthException catch (e) {
+      toastInfo(checkError(e.code));
+    } finally {
+      ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
+    }
+  }
 
   void logout() async {
     try {
       await _auth.signOut();
-      Global.storageService.setString(AppConstant.userToken, '');
+      Global.storageService.logout();
+      navKey.currentState!.pushReplacementNamed(RouteConstant.login);
     } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
     }

@@ -1,4 +1,5 @@
-
+import 'package:app_book/common/global_loader/global_loader.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,17 +42,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void login() {
+  void verifyForm() {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
 
     _formKey.currentState!.save();
+  }
+
+  void login() {
+    verifyForm();
     // saving both field to the login state
-    ref.
-    read(loginNotifierProvider.notifier).
-    updateEmail(emailController!.text);
+    ref.read(loginNotifierProvider.notifier).updateEmail(emailController!.text);
     ref
         .read(loginNotifierProvider.notifier)
         .updatePassword(passwordController!.text);
@@ -60,6 +63,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var loading = ref.watch(globalLoaderProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -98,6 +102,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Column(
                     children: [
                       TextFieldWidget(
+                        inputType: TextInputType.emailAddress,
                         label: "Email Address",
                         hintText: "Email Address",
                         controller: emailController,
@@ -141,7 +146,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             foregroundColor: primaryColor,
                           ),
                           onPressed: () {
-                            _controller.forgetPassword();
+                            Navigator.of(context)
+                                .pushNamed(RouteConstant.forgetPassword);
                           },
                           child: const Text('Forget Password?'),
                         ),
@@ -154,14 +160,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: ButtonWidget(
-                    onPressed: () {
-                      login();
-                    },
-                    text: "Log in",
-                    verticalPadding: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  child: loading
+                      ? const CupertinoActivityIndicator(
+                          color: primaryColor,
+                        )
+                      : ButtonWidget(
+                          onPressed: () {
+                            login();
+                          },
+                          text: "Log in",
+                          verticalPadding: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -174,7 +184,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Navigator.of(context)
                             .pushReplacementNamed(RouteConstant.signup);
                       },
-                      child: const Text('Sign up'),
+                      child: const Text(
+                        'Sign up',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -202,20 +215,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     vertical: 20.h,
                   ),
                   width: double.infinity,
-                  child: ButtonWidgetWithIcon(
-                    verticalPadding: 15,
-                    onPressed: () {
-                      _controller.handleGoogleSignIn();
-                    },
-                    icon: Image.asset(
-                      ImageConstant.google,
-                    ),
-                    side: const BorderSide(),
-                    fontWeight: FontWeight.w600,
-                    backgroundColor: Colors.white,
-                    text: "Sign in with Google",
-                    textColor: primaryColor,
-                  ),
+                  child: loading
+                      ? const CupertinoActivityIndicator(
+                          color: primaryColor,
+                        )
+                      : ButtonWidgetWithIcon(
+                          verticalPadding: 15,
+                          onPressed: () {
+                            _controller.handleGoogleSignIn(ref);
+                          },
+                          icon: Image.asset(
+                            ImageConstant.google,
+                          ),
+                          side: const BorderSide(),
+                          fontWeight: FontWeight.w600,
+                          backgroundColor: Colors.white,
+                          text: "Sign in with Google",
+                          textColor: primaryColor,
+                        ),
                 )
               ],
             ),

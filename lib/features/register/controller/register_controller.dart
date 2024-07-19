@@ -24,10 +24,11 @@ class RegisterController {
       var credential = await _auth.createUserWithEmailAndPassword(
           email: state.email, password: state.password);
 
-      if (credential.user == null) return ;
+      if (credential.user == null) return;
       await _auth.currentUser!.sendEmailVerification();
-    toastInfo('A verification email has been sent');
-      
+      toastInfo('A verification email has been sent');
+
+      navKey.currentState!.pushNamedAndRemoveUntil(RouteConstant.tab, (route)=>false);
     } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
     } finally {
@@ -35,12 +36,14 @@ class RegisterController {
     }
   }
 
-  void handleGoogleSignIn() async {
+  void handleGoogleSignIn(WidgetRef ref) async {
+    ref.watch(globalLoaderProvider.notifier).setLoaderValue(true);
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
 
+      if (googleSignInAccount == null) toastInfo('Could not sign in');
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
@@ -61,9 +64,13 @@ class RegisterController {
         toastInfo('Welcome ${userCredential.user!.displayName}');
       }
 
-      navKey.currentState!.pushNamed(RouteConstant.tab);
+      navKey.currentState!.pushNamedAndRemoveUntil(RouteConstant.tab, (route)=>false);
     } on PlatformException catch (e) {
+      toastInfo(e.code);
+    } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
+    } finally {
+      ref.watch(globalLoaderProvider.notifier).setLoaderValue(false);
     }
   }
 }

@@ -10,20 +10,23 @@ class Storage {
     return this;
   }
 
-    Future setString(String key, String value) async {
-      await _pref.setString(key, value);
-    }
+  Future setString(String key, String value) async {
+    await _pref.setString(key, value);
+  }
 
-    Future setBool(String key, bool value) async {
-      await _pref.setBool(key, value);
-    }
+  Future setBool(String key, bool value) async {
+    await _pref.setBool(key, value);
+  }
 
-    bool isLoggedIn() {
-      return _pref.getString(AppConstant.userToken) != null ? true : false;
-    }
+  bool isLoggedIn() {
+    return _pref.getString(AppConstant.userToken) != null ? true : false;
+  }
 
-    bool isDeviceFirstTime() {
-      return _pref.getBool(AppConstant.deviceFirstTime) ?? false;
-    }
+  Future<bool> logout() {
+    return _pref.remove(AppConstant.userToken);
+  }
 
+  bool isDeviceFirstTime() {
+    return _pref.getBool(AppConstant.deviceFirstTime) ?? false;
+  }
 }

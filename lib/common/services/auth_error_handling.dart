@@ -15,7 +15,7 @@ String checkError(String errorMessage) {
     case 'wrong-password':
       message = 'Wrong password';
       break;
-
   }
+
   return message;
 }

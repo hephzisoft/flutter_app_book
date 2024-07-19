@@ -13,5 +13,6 @@ class ImageConstant {
   static const girlReading = 'assets/svg/girls-reading.svg';
   static const peopleReading = 'assets/svg/people-reading.svg';
   static const onboardingImage3 = 'assets/svg/onboarding-3.svg';
+  static const forgotPassword = 'assets/svg/forget-password.svg';
 
 }
