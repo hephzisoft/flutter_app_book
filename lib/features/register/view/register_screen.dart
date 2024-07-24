@@ -6,12 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../common/global_loader/global_loader.dart';
 import '../../../common/routes/route_constant.dart';
 import '../../../common/services/auth_validator.dart';
-import '../../../common/utils/colors.dart';
 import '../../../common/widgets/button_widget.dart';
 import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';
 import '../controller/register_controller.dart';
 import '../provider/register_notifier.dart';
+import '../../../common/extensions/theme_extensions.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -147,8 +147,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: loading
-                      ? const CupertinoActivityIndicator(
-                          color: primaryColor,
+                      ? CupertinoActivityIndicator(
+                          color: context.primaryColor,
                         )
                       : ButtonWidget(
                           onPressed: () {
@@ -181,13 +181,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      color: primaryColor,
+                      color: context.primaryColor,
                       width: 157.w,
                       height: .7.h,
                     ),
                     const Text("OR"),
                     Container(
-                      color: primaryColor,
+                      color: context.primaryColor,
                       height: .5.h,
                       width: 157.w,
                     ),
@@ -199,8 +199,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   width: double.infinity,
                   child: loading
-                      ? const CupertinoActivityIndicator(
-                          color: primaryColor,
+                      ? CupertinoActivityIndicator(
+                          color: context.primaryColor,
                         )
                       : ButtonWidgetWithIcon(
                           verticalPadding: 15,
@@ -214,7 +214,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           fontWeight: FontWeight.w600,
                           backgroundColor: Colors.white,
                           text: "Sign up with Google",
-                          textColor: primaryColor,
+                          textColor: context.primaryColor,
                         ),
                 )
               ],

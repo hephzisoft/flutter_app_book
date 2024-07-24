@@ -13,9 +13,8 @@ class AppTheme {
     fontFamily: 'Inter',
   );
   static var darkTheme = ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: darkPrimaryColor,
-      brightness: Brightness.dark,
+    colorScheme: const ColorScheme.dark(
+      primary: darkPrimaryColor,
     ),
     fontFamily: 'Inter',
     textTheme: AppTextTheme.darkTextTheme,

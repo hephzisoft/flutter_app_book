@@ -28,7 +28,8 @@ class RegisterController {
       await _auth.currentUser!.sendEmailVerification();
       toastInfo('A verification email has been sent');
 
-      navKey.currentState!.pushNamedAndRemoveUntil(RouteConstant.tab, (route)=>false);
+      navKey.currentState!
+          .pushNamedAndRemoveUntil(RouteConstant.login, (route) => false);
     } on FirebaseAuthException catch (e) {
       toastInfo(checkError(e.code));
     } finally {
@@ -64,7 +65,8 @@ class RegisterController {
         toastInfo('Welcome ${userCredential.user!.displayName}');
       }
 
-      navKey.currentState!.pushNamedAndRemoveUntil(RouteConstant.tab, (route)=>false);
+      navKey.currentState!
+          .pushNamedAndRemoveUntil(RouteConstant.tab, (route) => false);
     } on PlatformException catch (e) {
       toastInfo(e.code);
     } on FirebaseAuthException catch (e) {

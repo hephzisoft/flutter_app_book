@@ -1,3 +1,4 @@
+import 'package:app_book/common/extensions/theme_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -45,7 +46,9 @@ class TextFieldWidget extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color(0xff1a1d2c),
+            color: context.brightness == Brightness.dark
+                ? const Color(0xff1a1d2c)
+                : const Color(0xfffafafa),
           ),
           child: TextFormField(
             controller: controller,

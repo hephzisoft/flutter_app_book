@@ -1,5 +1,4 @@
-import 'package:app_book/common/utils/colors.dart';
-import 'package:app_book/common/widgets/button_widget.dart';
+import 'package:app_book/common/extensions/theme_extensions.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../common/routes/route_constant.dart';
 import '../../../../common/utils/constants.dart';
 import '../../../../common/utils/image_constant.dart';
+import '../../../../common/widgets/button_widget.dart';
 import '../../../../global.dart';
 import '../../controller/splash_controller.dart';
 
@@ -102,10 +102,10 @@ class DotsIndicatorWidget extends StatelessWidget {
       dotsCount: dotsCount,
       position: position,
       decorator: DotsDecorator(
-        activeColor: Theme.of(context).colorScheme.primary,
-        activeSize: Size(20, 5),
-        size: Size.square(8),
-        activeShape: RoundedRectangleBorder(
+        activeColor: context.primaryColor,
+        activeSize: const Size(20, 5),
+        size: const Size.square(8),
+        activeShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -190,6 +190,7 @@ class ThirdPageViewWidget extends StatelessWidget {
                   ),
                   width: 280.w,
                   child: ButtonWidget(
+                    backgroundColor: context.primaryColor,
                     text: 'Get Started Now',
                     verticalPadding: 14,
                     onPressed: () {

@@ -12,6 +12,7 @@ import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';
 import '../controller/login_controller.dart';
 import '../provider/login_notifier.dart';
+import '../../../common/extensions/theme_extensions.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -143,7 +144,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           style: TextButton.styleFrom(
-                            foregroundColor: primaryColor,
+                            foregroundColor:
+                                context.brightness == Brightness.light
+                                    ? context.primaryColor
+                                    : Colors.white,
                           ),
                           onPressed: () {
                             Navigator.of(context)
@@ -161,8 +165,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: loading
-                      ? const CupertinoActivityIndicator(
-                          color: primaryColor,
+                      ? CupertinoActivityIndicator(
+                          color: context.primaryColor,
                         )
                       : ButtonWidget(
                           onPressed: () {
@@ -184,9 +188,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Navigator.of(context)
                             .pushReplacementNamed(RouteConstant.signup);
                       },
-                      child: const Text(
+                      child: Text(
                         'Sign up',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: context.primaryColor),
                       ),
                     ),
                   ],
@@ -198,13 +202,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      color: primaryColor,
+                      color: context.primaryColor,
                       width: 157.w,
                       height: .7.h,
                     ),
                     const Text("OR"),
                     Container(
-                      color: primaryColor,
+                      color: context.primaryColor,
                       height: .5.h,
                       width: 157.w,
                     ),
@@ -216,8 +220,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   width: double.infinity,
                   child: loading
-                      ? const CupertinoActivityIndicator(
-                          color: primaryColor,
+                      ? CupertinoActivityIndicator(
+                          color: context.primaryColor,
                         )
                       : ButtonWidgetWithIcon(
                           verticalPadding: 15,
@@ -231,7 +235,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           fontWeight: FontWeight.w600,
                           backgroundColor: Colors.white,
                           text: "Sign in with Google",
-                          textColor: primaryColor,
+                          textColor: context.primaryColor,
                         ),
                 )
               ],
