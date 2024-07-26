@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/utils/image_constant.dart';
-import '../../login/controller/login_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -31,6 +30,7 @@ class HomeScreen extends StatelessWidget {
                 'Recommended for you',
                 style: TextStyle(
                   fontSize: 20.sp,
+
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -15,4 +15,7 @@ class ImageConstant {
   static const onboardingImage3 = 'assets/svg/onboarding-3.svg';
   static const forgotPassword = 'assets/svg/forget-password.svg';
 
+
+//   IMAGES
+static const defaultBookImage  =  'assets/images/default_image.jpg';
 }

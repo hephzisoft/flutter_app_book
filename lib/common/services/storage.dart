@@ -10,6 +10,10 @@ class Storage {
     return this;
   }
 
+  String? getString(String key)  {
+    return  _pref.getString(key);
+  }
+
   Future setString(String key, String value) async {
     await _pref.setString(key, value);
   }

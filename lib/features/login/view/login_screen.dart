@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/routes/route_constant.dart';
 import '../../../common/services/auth_validator.dart';
-import '../../../common/utils/colors.dart';
 import '../../../common/widgets/button_widget.dart';
 import '../../../common/widgets/text_field_widget.dart';
 import '../../../common/utils/image_constant.dart';

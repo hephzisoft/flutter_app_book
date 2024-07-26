@@ -44,6 +44,7 @@ class AppRouter {
         if (route.first.routeName == RouteConstant.splash && isFirstTime) {
           final isLoggedIn = Global.storageService.isLoggedIn();
 
+
           if (isLoggedIn) {
             return MaterialPageRoute(
                 builder: (context) => const TabScreen(), settings: settings);
